@@ -39,7 +39,7 @@ Credit: [nomotion](https://www.nomotion.net/blog/sharknatto/)
   - When you see it is upgrading (power LED turns amber, and other LEDs are off), disconnect **ONT cable**.
   - Downgrade back to [9.2.2h0d83](firmware/nvg589/spnvg589-9.2.2h0d83.bin).
   - Now ssh should be enabled. **Please let me know if you find an easier and simpler method**.
-- In NVG589, run the following commands in order. (Credit: [samlii@dslreports](https://www.dslreports.com/forum/r32375916-))
+- In NVG589, run the following command
   ```
   ping -c 1 192.168.1.254;/usr/sbin/telnetd -l /bin/sh -p 9999
   ```

